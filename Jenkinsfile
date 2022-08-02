@@ -16,6 +16,7 @@ pipeline {
         sh 'pwd'
         sh 'ls'
         sh 'ls /tmp/workspace/spring-demo/target/'
+        sh 'cp -rf /tmp/workspace/spring-demo /tmp/build/inputs/'
       }
     }
     stage('Create Container Image') {
