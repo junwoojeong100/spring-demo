@@ -50,14 +50,18 @@ pipeline {
                     // Add steps here
                     openshift.withCluster() { 
                         openshift.withProject("spring-demo") { 
-                            def deployment = openshift.selector("dc", "spring-demo") 
-                            
+                            //def deployment = openshift.selector("dc", "spring-demo") 
+                            def deployment = openshift.selector("deploy", "spring-demo") 
+
                             //if(!deployment.exists()){ 
-                                openshift.newApp('spring-demo', "--as-deployment-config").narrow('svc').expose() 
+                                //openshift.newApp('spring-demo', "--as-deployment-config").narrow('svc').expose() 
                             //} 
+
+                            openshift.newApp('spring-demo', "--as-deployment").narrow('svc').expose() 
                             
                             timeout(5) { 
-                                openshift.selector("dc", "spring-demo").related('pods').untilEach(1) { 
+                                //openshift.selector("dc", "spring-demo").related('pods').untilEach(1) { 
+                                openshift.selector("deploy", "spring-demo").related('pods').untilEach(1) { 
                                     return (it.object().status.phase == "Running") 
                                 } 
                             } 
