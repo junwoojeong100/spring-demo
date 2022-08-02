@@ -57,7 +57,7 @@ pipeline {
                                 //openshift.newApp('spring-demo', "--as-deployment-config").narrow('svc').expose() 
                             //} 
 
-                            openshift.newApp('spring-demo').narrow('svc').expose() 
+                            openshift.newApp('spring-demo')
                             
                             timeout(5) { 
                                 //openshift.selector("dc", "spring-demo").related('pods').untilEach(1) { 
