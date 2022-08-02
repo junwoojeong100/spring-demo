@@ -8,7 +8,7 @@ pipeline {
 
     stages {
         stage('Build') {
-
+            steps {
                 echo 'Building..'
                 
                 // Add steps here
@@ -17,10 +17,10 @@ pipeline {
                 //sh 'pwd'
                 //sh 'ls /tmp/workspace/spring-demo/target/'
                 
-
+            }
         }
         stage('Create Container Image') {
-
+            steps {
                 echo 'Create Container Image..'
                 
                 script {
@@ -40,10 +40,10 @@ pipeline {
                     }
 
                 }
-
+            }
         }
         stage('Cleaningup') {
-
+            steps {
                 echo 'Cleaning up....'
                 script {
                     openshift.withCluster() { 
@@ -59,10 +59,10 @@ pipeline {
                         }
                     }
                 }
-
+            }
         }
         stage('Deploy') {
-
+            steps {
                 echo 'Deploying....'
                 script {
 
@@ -87,7 +87,7 @@ pipeline {
                         } 
                     }
                 }
-
+            }
         }
     }
 }
