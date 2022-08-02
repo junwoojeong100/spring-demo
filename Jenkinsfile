@@ -30,7 +30,7 @@ pipeline {
                     def buildConfigExists = openshift.selector("bc", "spring-demo").exists() 
                     
                     if(!buildConfigExists){ 
-                        openshift.newBuild("--name=spring-demo", "--to=quay.io/jjeong/spring-demo:latest", "--binary") 
+                        openshift.newBuild("--name=spring-demo", "--to=quay.io/jjeong/spring-demo:latest", "--binary=true") 
                     } 
                     
                     openshift.selector("bc", "spring-demo").startBuild("--from-file=target/demo-1.0.0.jar", "--follow") 
