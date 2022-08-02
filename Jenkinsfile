@@ -48,6 +48,10 @@ pipeline {
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("spring-demo") { 
+                            def service = openshift.selector("service", "spring-demo") 
+                            if(service.exists()){
+                                service.delete()
+                            }
                             def deployment = openshift.selector("deploy", "spring-demo") 
                             if(deployment.exists()){
                                 deployment.delete()
