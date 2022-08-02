@@ -1,32 +1,69 @@
+#! /usr/bin/env groovy
+
 pipeline {
 
-    agent {
-        label 'maven'
-    }
+  agent {
+    label 'maven'
+  }
 
   stages {
-    stage('Maven Install') {
+    stage('Build') {
       steps {
+        echo 'Building..'
+        
+        // Add steps here
         sh 'mvn clean install'
       }
     }
-    /*
-    stage('Docker Build') {
+    stage('Create Container Image') {
       steps {
-        sh 'docker build -t shanem/spring-petclinic:latest .'
-      }
-    }
-    stage('Docker Push') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
-          sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
-          sh 'docker push shanem/spring-petclinic:latest'
+        echo 'Create Container Image..'
+        
+        script {
+
+            // Add steps here
+            openshift.withCluster() { 
+                openshift.withProject("spring-demo") {
+                    def buildConfigExists = openshift.selector("bc", "spring-demo").exists() 
+                    
+                    if(!buildConfigExists){ 
+                    openshift.newBuild("--name=spring-demo", "--docker-image=jjeong/spring-demo:latest", "--binary") 
+                    } 
+                    
+                    openshift.selector("bc", "spring-demo").startBuild("--from-file=target/*.jar", "--follow") 
+                } 
+            }
+
         }
       }
-    }    
-    */
+    }
+    stage('Deploy') {
+      steps {
+        echo 'Deploying....'
+        script {
+
+            // Add steps here
+            openshift.withCluster() { 
+                openshift.withProject("spring-demo") { 
+                    def deployment = openshift.selector("dc", "spring-demo") 
+                    
+                    if(!deployment.exists()){ 
+                        openshift.newApp('spring-demo', "--as-deployment-config").narrow('svc').expose() 
+                    } 
+                    
+                    timeout(5) { 
+                        openshift.selector("dc", "spring-demo").related('pods').untilEach(1) { 
+                            return (it.object().status.phase == "Running") 
+                        } 
+                    } 
+                } 
+            }
+        }
+      }
+    }
   }
 }
+
 /*
 pipeline {
 
@@ -34,44 +71,27 @@ pipeline {
         label 'maven'
     }
 
-    stage('build') {
-        withCredentials([usernamePassword(credentialsId: 'github', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-            sh 'git clone https://$USERNAME:$PASSWORD@github.com/junw9293/spring-demo.git'
-        }
-
-        container('maven') {
-            stage('mvn package') {
-                dir('jenkins-on-eks/spring-boot') {
-                    sh 'mvn -Dmaven.repo.local=/var/jenkins_home/.m2/repository clean package'
-                }
+    stages {
+        stage('maven install') {
+            steps {
+                sh 'mvn clean install'
             }
         }
-
-        container('docker') {
-            stage('docker build & push') {
-                dir('jenkins-on-eks/spring-boot') {
-                    withCredentials([usernamePassword(credentialsId: 'dockerhub', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh '''
-                        docker build -t hello-spring-boot .
-                        docker tag hello-spring-boot openzon/hello-spring-boot:${BUILD_NUMBER}
-                        docker login -u=$USERNAME -p=$PASSWORD
-                        docker push openzon/hello-spring-boot:${BUILD_NUMBER}
-                    '''
+  
+        container('buildah') {
+            stage('buildah build & push') {
+                steps {
+                    sh 'buildah build -t jjeong/spring-demo:latest .'
+                    withCredentials([usernamePassword(credentialsId: 'quay.io', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+                        sh '''
+                            buildah login -u ${env.dockerHubUser} -p ${env.dockerHubPassword} quay.io
+                            buildah push https://quay.io/jjeong/spring-demo:latest
+                        '''
                     }
                 }
-            }
+            }    
         }
-    }
 
-    stage('deploy') {
-        container('kubectl') {
-            stage('kubectl set image') {
-                sh '''
-                    kubectl -n default set image deployment/hello-spring-boot hello-spring-boot=openzon/hello-spring-boot:${BUILD_NUMBER} --record
-                '''
-            }
-        }
-    }
-    
+    } 
 }
 */
