@@ -59,12 +59,13 @@ pipeline {
 
                             openshift.newApp('spring-demo')
                             
+                            /*
                             timeout(5) { 
-                                //openshift.selector("dc", "spring-demo").related('pods').untilEach(1) { 
+                                openshift.selector("dc", "spring-demo").related('pods').untilEach(1) { 
                                 openshift.selector("deploy", "spring-demo").related('pods').untilEach(1) { 
                                     return (it.object().status.phase == "Running") 
                                 } 
-                            } 
+                            }*/
                         } 
                     }
                 }
