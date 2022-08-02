@@ -27,10 +27,10 @@ pipeline {
                     // Add steps here
                     openshift.withCluster() { 
                         openshift.withProject("spring-demo") {
-                            def buildConfigExists = openshift.selector("bc", "spring-demo").exists() 
+                            def buildConfigExists = openshift.selector("bc", "s2i-build").exists() 
 
                             if(!buildConfigExists){ 
-                                openshift.newBuild("--name=spring-demo", "--to=quay.io/jjeong/spring-demo:latest", "--binary=true") 
+                                //openshift.newBuild("--name=spring-demo", "--to=quay.io/jjeong/spring-demo:latest", "--binary=true") 
                             } 
                             
                             openshift.selector("bc", "spring-demo").startBuild("--from-file=target/demo-1.0.0.jar", "--follow") 
