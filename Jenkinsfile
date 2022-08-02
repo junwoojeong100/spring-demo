@@ -57,6 +57,9 @@ pipeline {
                                 //openshift.newApp('spring-demo', "--as-deployment-config").narrow('svc').expose() 
                             //} 
 
+                            if(!deployment.exists()){
+                                deployment.delete()
+                            }
                             openshift.newApp('spring-demo')
                             
                             /*
