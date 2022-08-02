@@ -13,8 +13,9 @@ pipeline {
                 
                 // Add steps here
                 sh 'mvn clean install'
-                sh 'pwd'
-                sh 'ls /tmp/workspace/spring-demo/target/'
+
+                //sh 'pwd'
+                //sh 'ls /tmp/workspace/spring-demo/target/'
                 
             }
         }
@@ -33,7 +34,8 @@ pipeline {
                                 //openshift.newBuild("--name=spring-demo", "--to=quay.io/jjeong/spring-demo:latest", "--binary=true") 
                             } 
                             
-                            openshift.selector("bc", "s2i-build").startBuild("--from-file=target/demo-1.0.0.jar", "--follow") 
+                            //openshift.selector("bc", "s2i-build").startBuild("--from-file=target/demo-1.0.0.jar", "--follow") 
+                            openshift.selector("bc", "s2i-build").startBuild() 
                         } 
                     }
 
