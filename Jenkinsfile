@@ -12,7 +12,10 @@ pipeline {
         echo 'Building..'
         
         // Add steps here
+        sh 'ls'
         sh 'mvn clean install'
+        sh 'pwd'
+        sh 'ls'
       }
     }
     stage('Create Container Image') {
