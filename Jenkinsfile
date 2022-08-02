@@ -52,9 +52,9 @@ pipeline {
                         openshift.withProject("spring-demo") { 
                             def deployment = openshift.selector("dc", "spring-demo") 
                             
-                            if(!deployment.exists()){ 
+                            //if(!deployment.exists()){ 
                                 openshift.newApp('spring-demo', "--as-deployment-config").narrow('svc').expose() 
-                            } 
+                            //} 
                             
                             timeout(5) { 
                                 openshift.selector("dc", "spring-demo").related('pods').untilEach(1) { 
