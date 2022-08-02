@@ -16,7 +16,7 @@ pipeline {
         sh 'pwd'
         sh 'ls'
         sh 'ls /tmp/workspace/spring-demo/target/'
-        sh 'cp -rf /tmp/workspace/spring-demo /tmp/build/inputs/'
+        
       }
     }
     stage('Create Container Image') {
@@ -30,6 +30,8 @@ pipeline {
                 openshift.withProject("spring-demo") {
                     def buildConfigExists = openshift.selector("bc", "spring-demo").exists() 
                     
+                    sh 'cp -rf /tmp/workspace/spring-demo/Dockerfile /tmp/build/inputs/Dockerfile'
+
                     if(!buildConfigExists){ 
                         openshift.newBuild("--name=spring-demo", "--to=quay.io/jjeong/spring-demo:latest", "--binary=true") 
                     } 
