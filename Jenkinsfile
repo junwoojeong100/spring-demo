@@ -42,6 +42,21 @@ pipeline {
                 }
             }
         }
+        stage('Cleaningup') {
+            steps {
+                echo 'Cleaning up....'
+                script {
+                    openshift.withCluster() { 
+                        openshift.withProject("spring-demo") { 
+                            def deployment = openshift.selector("deploy", "spring-demo") 
+                            if(deployment.exists()){
+                                deployment.delete()
+                            }
+                        }
+                    }
+                }
+            }
+        }
         stage('Deploy') {
             steps {
                 echo 'Deploying....'
@@ -51,15 +66,11 @@ pipeline {
                     openshift.withCluster() { 
                         openshift.withProject("spring-demo") { 
                             //def deployment = openshift.selector("dc", "spring-demo") 
-                            def deployment = openshift.selector("deploy", "spring-demo") 
 
                             //if(!deployment.exists()){ 
                                 //openshift.newApp('spring-demo', "--as-deployment-config").narrow('svc').expose() 
                             //} 
 
-                            if(deployment.exists()){
-                                deployment.delete()
-                            }
                             openshift.newApp('spring-demo')
                             
                             /*
