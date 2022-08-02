@@ -12,10 +12,10 @@ pipeline {
         echo 'Building..'
         
         // Add steps here
-        sh 'ls'
         sh 'mvn clean install'
         sh 'pwd'
         sh 'ls'
+        sh 'ls /tmp/workspace/spring-demo/target/'
       }
     }
     stage('Create Container Image') {
