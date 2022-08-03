@@ -42,9 +42,9 @@ pipeline {
                 }
             }
         }
-        stage('Cleaningup') {
+        stage('Cleaning Up') {
             steps {
-                echo 'Cleaning up....'
+                echo 'Cleaning Up....'
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("spring-demo") { 
