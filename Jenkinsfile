@@ -11,7 +11,8 @@ pipeline {
             steps {
                 echo 'Building..'
 
-                configFileProvider([configFile(fileId: 'maven_settings_xml', variable: 'maven_settings')]) {
+                configFileProvider(
+                    [configFile(fileId: 'nexus', variable: 'MAVEN_SETTINGS')]) {
                 // Add steps here
                 sh 'mvn clean install'
                 }
