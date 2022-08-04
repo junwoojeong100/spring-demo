@@ -12,7 +12,7 @@ pipeline {
                 echo 'Building..'
 configFileProvider([configFile(fileId: '8dd52123-d487-4555-8a03-55888835d986', variable: 'MyGlobalSettings')]) {
                 // Add steps here
-                sh 'mvn clean install'
+                sh 'mvn -s $MyGlobalSettings clean install'
 }
                 //sh 'pwd'
                 //sh 'ls /tmp/workspace/spring-demo/target/'
