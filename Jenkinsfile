@@ -10,10 +10,11 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                
+
+                configFileProvider([configFile(fileId: 'maven_settings_xml', variable: 'maven_settings')]) {
                 // Add steps here
                 sh 'mvn clean install'
-
+                }
                 //sh 'pwd'
                 //sh 'ls /tmp/workspace/spring-demo/target/'
                 
