@@ -9,43 +9,33 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                echo 'Building..'
-                
+                echo 'Building ...'
+                /*
                 configFileProvider([configFile(fileId: '8dd52123-d487-4555-8a03-55888835d986', variable: 'MyGlobalSettings')]) {
-                    // Add steps here
                     sh 'mvn -s $MyGlobalSettings clean install'
                 }
+                */
+                sh 'mvn clean install'
             }
         }
         stage('Create Container Image') {
             steps {
-                echo 'Create Container Image..'
-                
+                echo 'Creating Container Image ...'
                 script {
-
-                    // Add steps here
                     openshift.withCluster() { 
-                        openshift.withProject("spring-demo") {
-                            def buildConfigExists = openshift.selector("bc", "s2i-build").exists() 
-
-                            if(!buildConfigExists){ 
-                                //openshift.newBuild("--name=spring-demo", "--to=quay.io/jjeong/spring-demo:latest", "--binary=true") 
-                            } 
-                            
-                            //openshift.selector("bc", "s2i-build").startBuild("--from-file=target/demo-1.0.0.jar", "--follow") 
-                            openshift.selector("bc", "s2i-build").startBuild() 
+                        openshift.withProject("cicd-demo") {
+                            openshift.selector("bc", "spring-demo").startBuild() 
                         } 
                     }
-
                 }
             }
         }
-        stage('Cleaning Up') {
+        stage('Cleaning Up') {  // It is supposed to replace it with gitops
             steps {
-                echo 'Cleaning Up....'
+                echo 'Cleaning Up ...'
                 script {
                     openshift.withCluster() { 
-                        openshift.withProject("spring-demo") { 
+                        openshift.withProject("cicd-demo") { 
                             def service = openshift.selector("service", "spring-demo") 
                             if(service.exists()){
                                 service.delete()
@@ -59,29 +49,13 @@ pipeline {
                 }
             }
         }
-        stage('Deploy') {
+        stage('Deploy') {   // It is supposed to replace it with gitops
             steps {
-                echo 'Deploying....'
+                echo 'Deploying ...'
                 script {
-
-                    // Add steps here
                     openshift.withCluster() { 
-                        openshift.withProject("spring-demo") { 
-                            //def deployment = openshift.selector("dc", "spring-demo") 
-
-                            //if(!deployment.exists()){ 
-                                //openshift.newApp('spring-demo', "--as-deployment-config").narrow('svc').expose() 
-                            //} 
-
-                            openshift.newApp('spring-demo')
-                            
-                            /*
-                            timeout(5) { 
-                                openshift.selector("dc", "spring-demo").related('pods').untilEach(1) { 
-                                openshift.selector("deploy", "spring-demo").related('pods').untilEach(1) { 
-                                    return (it.object().status.phase == "Running") 
-                                } 
-                            }*/
+                        openshift.withProject("cicd-demo") { 
+                            openshift.newApp('spring-demo')  
                         } 
                     }
                 }
