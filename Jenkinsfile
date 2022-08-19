@@ -36,6 +36,10 @@ pipeline {
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") { 
+                            def route = openshift.selector("route", "spring-demo") 
+                            if(route.exists()){
+                                route.delete()
+                            }
                             def service = openshift.selector("service", "spring-demo") 
                             if(service.exists()){
                                 service.delete()
