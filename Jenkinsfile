@@ -15,7 +15,7 @@ pipeline {
                     sh 'mvn -s $MyGlobalSettings clean install'
                 }
                 */
-                sh 'mvn clean install'
+                sh 'mvn clean install -DskipTests'
             }
         }
         stage('Create Container Image') {
