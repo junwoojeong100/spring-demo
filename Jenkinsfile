@@ -55,7 +55,7 @@ pipeline {
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") { 
-                            openshift.newApp('spring-demo')  
+                            openshift.newApp("quay.io/jjeong/spring-demo:latest", "--name=spring-demo").narrow('svc').expose()
                         } 
                     }
                 }
