@@ -18,7 +18,7 @@ pipeline {
                 sh 'mvn clean install -DskipTests'
             }
         }
-        stage('Create Container Image') {
+        stage('Create Container Image') { // It is supposed to replace it with gitops
             steps {
                 echo 'Creating Container Image ...'
                 script {
