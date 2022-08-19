@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-        stage('Build') {
+        stage('Maven Build') {
             steps {
                 echo 'Building ...'
                 /*
@@ -16,6 +16,16 @@ pipeline {
                 }
                 */
                 sh 'mvn clean install -DskipTests'
+            }
+        }
+        stage('Maven Sonar Plugin') {
+            steps {
+                echo 'Processing Maven Sonar Plugin ...'
+            }
+        }
+        stage('Camel Maven Plugin') {
+            steps {
+                echo 'Processing Camel Maven Plugin ...'
             }
         }
         stage('Create Container Image') { // It is supposed to replace it with gitops
@@ -28,6 +38,11 @@ pipeline {
                         } 
                     }
                 }
+            }
+        }
+        stage('Prisma Cloud Image Scanning') {
+            steps {
+                echo 'Processing Prisma Cloud Image Scanning ...'
             }
         }
         stage('Cleaning Up') {  // It is supposed to replace it with gitops
