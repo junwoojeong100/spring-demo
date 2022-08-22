@@ -10,36 +10,11 @@ pipeline {
         stage('Maven Build') {
             steps {
                 echo 'Building ...'
-                /*
-                configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
-                    sh 'mvn -s $MyGlobalSettings clean install -DskipTests'
-                }
-                */
                 configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
                     withSonarQubeEnv('SonarQubeServer') {
-                        //sh 'mvn -s $MyGlobalSettings clean package sonar:sonar -DskipTests'
                         sh 'mvn -s $MyGlobalSettings clean package sonar:sonar -DskipTests'
                     }
                 }
-            }
-        }
-        stage('Maven Sonar Plugin') {
-            steps {
-                echo 'Processing Maven Sonar Plugin ...'
-                /*
-                configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
-                    sh 'mvn sonar:sonar -Dsonar.login=squ_17ceb9e57cc743c1add306777849d3069f95e31a'
-                }
-                */
-                /*
-                configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
-                    //withSonarQubeEnv(installationName: 'SonarQubeServer', credentialsId: 'SonarQubeToken') {
-                    withSonarQubeEnv('SonarQubeServer') {
-                        //sh 'mvn -s $MyGlobalSettings clean package sonar:sonar -DskipTests'
-                        sh 'mvn -s $MyGlobalSettings sonar:sonar'
-                    }
-                }
-                */
             }
         }
         stage('Camel Maven Plugin') {
@@ -47,10 +22,9 @@ pipeline {
                 echo 'Processing Camel Maven Plugin ...'
             }
         }
-        stage('Create Container Image') { // It is supposed to replace it with gitops
+        stage('Create Container Image') { 
             steps {
                 echo 'Creating Container Image ...'
-                /*
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") {
@@ -58,7 +32,6 @@ pipeline {
                         } 
                     }
                 }
-                */
             }
         }
         stage('Prisma Cloud Image Scanning') {
@@ -69,7 +42,6 @@ pipeline {
         stage('Cleaning Up') {  // It is supposed to replace it with gitops
             steps {
                 echo 'Cleaning Up ...'
-                /*
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") { 
@@ -88,13 +60,11 @@ pipeline {
                         }
                     }
                 }
-                */
             }
         }
         stage('Deploy') {   // It is supposed to replace it with gitops
             steps {
                 echo 'Deploying ...'
-                /*
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") { 
@@ -102,7 +72,6 @@ pipeline {
                         } 
                     }
                 }
-                */
             }
         }
     }
