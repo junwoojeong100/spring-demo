@@ -28,7 +28,7 @@ pipeline {
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") {
-                            openshift.selector("bc", "spring-demo").startBuild("--from-file=target/demo-1.0.0.jar") 
+                            openshift.selector("bc", "spring-demo").startBuild("--from-file=target/spring-demo-1.0.0.jar") 
                         } 
                     }
                 }
