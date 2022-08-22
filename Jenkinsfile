@@ -17,8 +17,8 @@ pipeline {
         }
         stage('Maven Sonar Plugin') {
             steps {
-                /*
                 echo 'Processing Maven Sonar Plugin ...'
+                /*
                 configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
                     sh 'mvn sonar:sonar -Dsonar.login=squ_17ceb9e57cc743c1add306777849d3069f95e31a'
                 }
