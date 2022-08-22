@@ -10,11 +10,11 @@ pipeline {
         stage('Maven Build') {
             steps {
                 echo 'Building ...'
-                configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
+                //configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
                     withSonarQubeEnv('SonarQubeServer') {
                         sh 'mvn -s $MyGlobalSettings clean package sonar:sonar -DskipTests'
                     }
-                }
+                //}
             }
         }
         stage('Camel Maven Plugin') {
