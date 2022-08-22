@@ -25,7 +25,7 @@ pipeline {
                     sh 'mvn sonar:sonar -Dsonar.login=squ_17ceb9e57cc743c1add306777849d3069f95e31a'
                 }
                 */
-                withSonarQubeEnv(installationName: 'SonarQubeScanner', credentialsId: 'SonarQubeToken') {
+                withSonarQubeEnv(installationName: 'SonarQubeServer, credentialsId: 'SonarQubeToken') {
                     sh 'mvn clean package sonar:sonar'
                 }
             }
@@ -38,6 +38,7 @@ pipeline {
         stage('Create Container Image') { // It is supposed to replace it with gitops
             steps {
                 echo 'Creating Container Image ...'
+                /*
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") {
@@ -45,6 +46,7 @@ pipeline {
                         } 
                     }
                 }
+                */
             }
         }
         stage('Prisma Cloud Image Scanning') {
