@@ -10,9 +10,11 @@ pipeline {
         stage('Maven Build') {
             steps {
                 echo 'Building ...'
+                /*
                 configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
                     sh 'mvn -s $MyGlobalSettings clean install -DskipTests'
                 }
+                */
             }
         }
         stage('Maven Sonar Plugin') {
@@ -24,7 +26,7 @@ pipeline {
                 }
                 */
                 withSonarQubeEnv(installationName: 'SonarQubeScanner', credentialsId: 'SonarQubeToken') {
-                sh 'mvn clean package sonar:sonar'
+                    sh 'mvn clean package sonar:sonar'
                 }
             }
         }
@@ -53,6 +55,7 @@ pipeline {
         stage('Cleaning Up') {  // It is supposed to replace it with gitops
             steps {
                 echo 'Cleaning Up ...'
+                /*
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") { 
@@ -71,11 +74,13 @@ pipeline {
                         }
                     }
                 }
+                */
             }
         }
         stage('Deploy') {   // It is supposed to replace it with gitops
             steps {
                 echo 'Deploying ...'
+                /*
                 script {
                     openshift.withCluster() { 
                         openshift.withProject("cicd-demo") { 
@@ -83,6 +88,7 @@ pipeline {
                         } 
                     }
                 }
+                */
             }
         }
     }
