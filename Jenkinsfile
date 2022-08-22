@@ -23,6 +23,9 @@ pipeline {
                     sh 'mvn sonar:sonar -Dsonar.login=squ_17ceb9e57cc743c1add306777849d3069f95e31a'
                 }
                 */
+                withSonarQubeEnv(installationName: 'SonarQubeScanner', credentialsId: 'SonarQubeToken') {
+                sh 'mvn clean package sonar:sonar'
+                }
             }
         }
         stage('Camel Maven Plugin') {
