@@ -25,8 +25,10 @@ pipeline {
                     sh 'mvn sonar:sonar -Dsonar.login=squ_17ceb9e57cc743c1add306777849d3069f95e31a'
                 }
                 */
-                withSonarQubeEnv(installationName: 'SonarQubeServer', credentialsId: 'SonarQubeToken') {
-                    sh 'mvn clean package sonar:sonar'
+                configFileProvider([configFile(fileId: 'af0e1436-6947-46ec-8d14-82ab913367de', variable: 'MyGlobalSettings')]) {
+                    withSonarQubeEnv(installationName: 'SonarQubeServer', credentialsId: 'SonarQubeToken') {
+                        sh 'mvn -s $MyGlobalSettings clean package sonar:sonar -DskipTests'
+                    }
                 }
             }
         }
