@@ -18,7 +18,7 @@ pipeline {
                 }
                 */
                 withSonarQubeEnv('SonarQubeServer') {
-                    sh 'mvn clean package sonar:sonar -DskipTests'
+                    sh 'mvn -s config/settings.xml clean package sonar:sonar -DskipTests'
                 }
             }
         }
