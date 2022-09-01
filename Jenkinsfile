@@ -32,7 +32,7 @@ pipeline {
                 echo 'Creating Container Image ...'
                 script {
                     openshift.withCluster() { 
-                        openshift.withProject("cicd-demo") {
+                        openshift.withProject("cicd-jenkins") {
                             openshift.selector("bc", "spring-demo").startBuild("--from-file=target/spring-demo-1.0.0.jar") 
                         } 
                     }
@@ -49,7 +49,7 @@ pipeline {
                 echo 'Cleaning Up ...'
                 script {
                     openshift.withCluster() { 
-                        openshift.withProject("cicd-demo") { 
+                        openshift.withProject("cicd-jenkins") { 
                             def route = openshift.selector("route", "spring-demo") 
                             if(route.exists()){
                                 route.delete()
@@ -72,7 +72,7 @@ pipeline {
                 echo 'Deploying ...'
                 script {
                     openshift.withCluster() { 
-                        openshift.withProject("cicd-demo") { 
+                        openshift.withProject("cicd-jenkins") { 
                             openshift.newApp("quay.io/jjeong/spring-demo:latest", "--name=spring-demo").narrow('svc').expose("--path=/hello")
                         } 
                     }
