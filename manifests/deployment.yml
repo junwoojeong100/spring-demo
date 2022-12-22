@@ -16,4 +16,4 @@ spec:
         - name: junwspringdemo 
           image: junwoo.azurecr.io/junwspringdemo
           ports:
-          - containerPort: 80
+          - containerPort: 8080
