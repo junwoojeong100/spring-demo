@@ -17,3 +17,5 @@ spec:
           image: junwoo.azurecr.io/junwspringdemo
           ports:
           - containerPort: 80
+      imagePullSecrets:
+        - name: acr-pull-secret    
