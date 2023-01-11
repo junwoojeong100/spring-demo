@@ -1,21 +1,21 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: junwspringdemo 
+  name: junwoojeongspringdemo 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: junwspringdemo
+      app: junwoojeongspringdemo
   template:
     metadata:
       labels:
-        app: junwspringdemo 
+        app: junwoojeongspringdemo 
     spec:
       containers:
-        - name: junwspringdemo 
-          image: junwoo.azurecr.io/junwspringdemo:20
+        - name: junwoojeongspringdemo 
+          image: junwoo.azurecr.io/junwoojeongspringdemo:1
           ports:
           - containerPort: 80
-      imagePullSecrets:
-        - name: acr-pull-secret    
+      #imagePullSecrets:
+      #  - name: acr-pull-secret    
