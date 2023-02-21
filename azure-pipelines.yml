@@ -61,7 +61,7 @@ stages:
     displayName: Deploy
     pool:
       vmImage: $(vmImageName)
-    environment: 'junwoojeong100springdemo.default'
+    environment: 'junwoojeong100springdemo'
     strategy:
       runOnce:
         deploy:
