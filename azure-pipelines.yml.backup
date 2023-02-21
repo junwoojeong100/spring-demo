@@ -11,6 +11,7 @@ resources:
 variables:
 
   # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '42a441a7-5174-4e06-a935-0a422b8d1127'
   imageRepository: 'junwoojeongspringdemo'
   containerRegistry: 'cr2023.azurecr.io'
   dockerfilePath: '**/Dockerfile'
