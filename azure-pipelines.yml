@@ -70,7 +70,7 @@ stages:
             displayName: Create imagePullSecret
             inputs:
               action: createSecret
-              kubernetesServiceConnection: 'aks-2023-a1-default'
+              kubernetesServiceConnection: 'aks-2023-a1-default-connection'
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
