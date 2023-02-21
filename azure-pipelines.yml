@@ -16,7 +16,6 @@ variables:
   dockerfilePath: '**/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'cr2023f759-auth'
-  kubernetesServiceConnection: 'aks-2023-a1-test'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -71,7 +70,7 @@ stages:
             displayName: Create imagePullSecret
             inputs:
               action: createSecret
-              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              kubernetesServiceConnection: 'aks-2023-a1-default'
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
