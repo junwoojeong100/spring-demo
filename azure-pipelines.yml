@@ -11,6 +11,7 @@ resources:
 variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: 'd48f41c9-314c-48cb-b696-fdc3b5c3587d'
+  kubernetesServiceConnection: 'aks-2023-a1-default-connection'
   imageRepository: 'junwoojeongspringdemo'
   containerRegistry: 'cr2023.azurecr.io'
   dockerfilePath: '**/Dockerfile'
@@ -70,7 +71,7 @@ stages:
             displayName: Create imagePullSecret
             inputs:
               action: createSecret
-              kubernetesServiceConnection: 'aks-2023-a1-default-connection'
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
               secretName: $(imagePullSecret)
               dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
 
