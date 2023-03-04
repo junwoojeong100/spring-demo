@@ -69,7 +69,7 @@ stages:
               action: deploy
               kubernetesServiceConnection: $(kubernetesServiceConnection)
               manifests: |
-                $(Pipeline.Workspace)/manifests/deployment.yml
-                $(Pipeline.Workspace)/manifests/service.yml
+                $(System.ArtifactsDirectory)/manifests/deployment.yml
+                $(System.ArtifactsDirectory)/manifests/service.yml
               containers: |
                 $(containerRegistry)/$(imageRepository):$(tag)
