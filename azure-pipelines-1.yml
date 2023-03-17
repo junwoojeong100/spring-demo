@@ -43,7 +43,7 @@ stages:
   displayName: Deploy 
   jobs: 
   - deployment: VMDeploy
-    displayName: web
+    displayName: Deploy
     environment:
       name: test-deploy-to-vm
       resourceType: VirtualMachine
