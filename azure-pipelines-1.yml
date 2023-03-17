@@ -58,6 +58,7 @@ stages:
         deploy:
           steps:
           - task: Bash@3
+            timeoutInMinutes: 1
             inputs:
               targetType: 'inline'
               script: |
