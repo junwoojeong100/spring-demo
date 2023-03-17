@@ -65,7 +65,6 @@ stages:
                 echo "Starting deployment script run"
                 sudo killall java 
                 sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar'
-                sudo logout
         routeTraffic:
           steps:
           - script: echo routing traffic
