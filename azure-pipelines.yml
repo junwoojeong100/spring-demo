@@ -64,7 +64,7 @@ stages:
                 script: |
                   # Modify deployment script based on the app type
                   echo "Starting deployment script run"
-                  sudo java -jar '$(Pipeline.Workspace)/drop/**/target/*.jar'
+                  sudo java -jar '$(Pipeline.Workspace)/drop/**/target/spring-demo-1.0.0.jar'
           routeTraffic:
             steps:
             - script: echo routing traffic
