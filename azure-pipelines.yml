@@ -10,11 +10,13 @@ resources:
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '726d051a-fb42-4a99-8dc2-bb3f15906bd8'
+  dockerRegistryServiceConnection: '1b42283b-ee31-4114-a2b6-b32f92da184d'
   imageRepository: 'junwoojeongspringdemo'
   containerRegistry: 'cr2023.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
+  kubernetesServiceConnection: 'aks-2023-a1'
+  imagePullSecret: 'cr2023f759-auth'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
@@ -28,6 +30,7 @@ stages:
     pool:
       vmImage: $(vmImageName)
     steps:
+
     - task: Maven@4
       inputs:
         mavenPomFile: 'pom.xml'
@@ -37,44 +40,51 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-    - upload: $(system.defaultWorkingDirectory)
-      artifact: drop    
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)
+
+    - upload: manifests
+      artifact: manifests
+      condition: 
+
 - stage: Deploy
-  displayName: Deploy 
-  jobs: 
-  - deployment: VMDeploy
-    displayName: web
-    environment:
-      name: test-deploy-to-vm
-      resourceType: VirtualMachine
+  displayName: Deploy stage
+  dependsOn: Build
+
+  jobs:
+  - deployment: Deploy
+    displayName: Deploy
+    pool:
+      vmImage: $(vmImageName)
+    environment: 'junwoojeong100springdemo'
     strategy:
       runOnce:
-        preDeploy:
-          steps:
-          - download: current
-            artifact: drop
-          - script: |
-              echo initialize, cleanup, backup, install certs
         deploy:
           steps:
-          - task: Bash@3
+          - task: KubernetesManifest@0
+            displayName: Create imagePullSecret
             inputs:
-              targetType: 'inline'
-              script: |
-                # Modify deployment script based on the app type
-                echo "Starting deployment script run"
-                sudo killall java 
-                sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar'
-        routeTraffic:
-          steps:
-          - script: echo routing traffic
-        postRouteTraffic:
-          steps:
-          - script: echo health check post-route traffic
-        on:
-          failure:
-            steps:
-            - script: echo Restore from backup! This is on failure
-          success:
-            steps:
-            - script: echo Notify! This is on success
+              action: createSecret
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              secretName: $(imagePullSecret)
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+
+          - task: KubernetesManifest@0
+            displayName: Deploy to Kubernetes cluster
+            inputs:
+              action: deploy
+              kubernetesServiceConnection: $(kubernetesServiceConnection)
+              manifests: |
+                $(Pipeline.Workspace)/manifests/deployment.yml
+                $(Pipeline.Workspace)/manifests/service.yml
+              imagePullSecrets: |
+                $(imagePullSecret)
+              containers: |
+                $(containerRegistry)/$(imageRepository):$(tag) 
