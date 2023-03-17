@@ -58,14 +58,13 @@ stages:
         deploy:
           steps:
           - task: Bash@3
-            timeoutInMinutes: 1
             inputs:
               targetType: 'inline'
               script: |
                 # Modify deployment script based on the app type
                 echo "Starting deployment script run"
                 sudo killall java 
-                sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar'
+                sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar' &
         routeTraffic:
           steps:
           - script: echo routing traffic
