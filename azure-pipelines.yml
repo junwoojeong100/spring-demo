@@ -66,4 +66,3 @@ stages:
                   echo "Starting deployment script run"
                   sudo killall java 
                   sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar'
-                  exit 0
