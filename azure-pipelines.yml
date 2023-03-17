@@ -37,7 +37,7 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-    - upload: $(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip
+    - upload: $(system.defaultWorkingDirectory)
       artifact: drop    
 - stage: Deploy
   displayName: Deploy 
