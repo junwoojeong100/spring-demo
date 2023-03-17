@@ -56,7 +56,6 @@ stages:
               artifact: drop
             - script: |
                 echo initialize, cleanup, backup, install certs
-                sudo apt-get update
                 sudo apt install default-jre
           deploy:
             steps:
