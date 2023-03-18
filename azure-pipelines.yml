@@ -27,6 +27,7 @@ stages:
     displayName: Build
     pool:
       vmImage: $(vmImageName)
+    container: ubuntu:18.04
     steps:
     - task: Maven@4
       inputs:
@@ -47,6 +48,7 @@ stages:
     environment:
       name: test-deploy-to-vm
       resourceType: VirtualMachine
+    container: ubuntu:18.04  
     strategy:
       runOnce:
         preDeploy:
