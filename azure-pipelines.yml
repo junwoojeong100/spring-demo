@@ -66,6 +66,7 @@ stages:
                 #sudo killall java 
                 #sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar' &
 
+                sudo docker stop $(docker ps -a -q)
                 sudo docker login cr2023.azurecr.io
                 sudo docker pull cr2023.azurecr.io/junwoojeongspringdemo:158
                 sudo docker run -p 80:80 cr2023.azurecr.io/junwoojeongspringdemo:158 
