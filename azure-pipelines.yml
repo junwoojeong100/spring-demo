@@ -55,15 +55,6 @@ stages:
             artifact: drop
           - script: |
               echo initialize, cleanup, backup, install certs
-
-              sudo apt update
-              sudo apt install apt-transport-https ca-certificates curl software-properties-common
-              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-              sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-              apt-cache policy docker-ce
-              sudo apt install docker-ce
-              sudo systemctl status docker
-
         deploy:
           steps:
           - task: Bash@3
@@ -75,5 +66,6 @@ stages:
                 #sudo killall java 
                 #sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar' &
 
-                docker pull cr2023.azurecr.io/junwoojeongspringdemo:158
-                docker run -p 80:80 cr2023.azurecr.io/junwoojeongspringdemo:158 
+                sudo docker login cr2023.azurecr.io
+                sudo docker pull cr2023.azurecr.io/junwoojeongspringdemo:158
+                sudo docker run -p 80:80 cr2023.azurecr.io/junwoojeongspringdemo:158 
