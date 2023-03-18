@@ -46,8 +46,7 @@ stages:
     displayName: Deploy
     environment:
       name: test-deploy-to-vm
-      resourceType: VirtualMachine
-    container: ubuntu:18.04  
+      resourceType: VirtualMachine  
     strategy:
       runOnce:
         preDeploy:
