@@ -27,7 +27,6 @@ stages:
     displayName: Build
     pool:
       vmImage: $(vmImageName)
-    container: ubuntu:18.04
     steps:
     - task: Maven@4
       inputs:
