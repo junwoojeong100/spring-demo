@@ -49,7 +49,7 @@ stages:
 - stage: Deploy
   displayName: Deploy 
   jobs: 
-  - deployment: VMDeploy
+  - deployment: ContainerDeploy
     displayName: Deploy
     environment:
       name: test-deploy-to-vm
