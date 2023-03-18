@@ -66,5 +66,7 @@ stages:
                 echo "Starting deployment script run"
                 #sudo killall java 
                 #sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar' &
-                docker pull cr2023.azurecr.io/junwoojeongspringdemo:158
-                docker run -p 80:80 cr2023.azurecr.io/junwoojeongspringdemo:158 
+                sudo apt-get -y update
+                sudo apt-get -y install podman
+                podman pull cr2023.azurecr.io/junwoojeongspringdemo:158
+                podman run -p 80:80 cr2023.azurecr.io/junwoojeongspringdemo:158 
