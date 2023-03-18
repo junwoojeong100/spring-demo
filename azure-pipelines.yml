@@ -65,7 +65,7 @@ stages:
                 # Modify deployment script based on the app type
                 echo "Starting deployment script run"
 
-                sudo docker stop $(docker ps -a -q)
-                sudo docker login cr2023.azurecr.io
-                sudo docker pull cr2023.azurecr.io/junwoojeongspringdemo:$(tag) 
-                sudo docker run -p 80:80 cr2023.azurecr.io/junwoojeongspringdemo:$(tag)  &
+                sudo docker stop $(sudo docker ps -a -q)
+                sudo docker login $(containerRegistry)
+                sudo docker pull $(containerRegistry)/$(imageRepository):$(tag) 
+                sudo docker run -p 80:80 $(containerRegistry)/$(imageRepository):$(tag)  &
