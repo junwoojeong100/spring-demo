@@ -47,7 +47,7 @@ stages:
         tags: |
           $(tag)   
 - stage: Deploy
-  displayName: Deploy 
+  displayName: Deploy stage
   jobs: 
   - deployment: ContainerDeploy
     displayName: Deploy
