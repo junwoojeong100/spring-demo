@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: junwoojeongspringdemo 
-          image: cr2023.azurecr.io/junwoojeongspringdemo:7
+          image: cr2023.azurecr.io/junwoojeongspringdemo:158
           ports:
           - containerPort: 80
       #imagePullSecrets:
