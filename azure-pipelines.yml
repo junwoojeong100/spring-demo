@@ -1,3 +1,7 @@
+# Docker
+# Build and push an image to Azure Container Registry
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
 trigger:
 - master
 
@@ -5,16 +9,22 @@ resources:
 - repo: self
 
 variables:
+  # Container registry service connection established during pipeline creation
+  dockerRegistryServiceConnection: '726d051a-fb42-4a99-8dc2-bb3f15906bd8'
+  imageRepository: 'junwoojeongspringdemo'
+  containerRegistry: 'cr2023.azurecr.io'
+  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+  tag: '$(Build.BuildId)'
 
   # Agent VM image name
   vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
-  displayName: Build stage
+  displayName: Build and push stage
   jobs:
   - job: Build
-    displayName: Build job
+    displayName: Build
     pool:
       vmImage: $(vmImageName)
     steps:
@@ -27,24 +37,25 @@ stages:
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
-    - upload: $(system.defaultWorkingDirectory)
-      artifact: drop    
+    - task: Docker@2
+      displayName: Build and push an image to container registry
+      inputs:
+        command: buildAndPush
+        repository: $(imageRepository)
+        dockerfile: $(dockerfilePath)
+        containerRegistry: $(dockerRegistryServiceConnection)
+        tags: |
+          $(tag)   
 - stage: Deploy
-  displayName: Deploy stage
+  displayName: Deploy 
   jobs: 
-  - deployment: VMDeploy
-    displayName: Deploy job
+  - deployment: ContainerDeploy
+    displayName: Deploy
     environment:
       name: test-deploy-to-vm
-      resourceType: VirtualMachine
+      resourceType: VirtualMachine  
     strategy:
       runOnce:
-        preDeploy:
-          steps:
-          - download: current
-            artifact: drop
-          - script: |
-              echo initialize, cleanup, backup, install certs
         deploy:
           steps:
           - task: Bash@3
@@ -53,5 +64,8 @@ stages:
               script: |
                 # Modify deployment script based on the app type
                 echo "Starting deployment script run"
-                sudo killall java 
-                sudo java -jar '$(Pipeline.Workspace)/drop/target/spring-demo-1.0.0.jar' &
+
+                sudo docker stop $(sudo docker ps -a -q)
+                sudo docker login $(containerRegistry)
+                sudo docker pull $(containerRegistry)/$(imageRepository):$(tag) 
+                sudo docker run -p 80:80 $(containerRegistry)/$(imageRepository):$(tag)  &
