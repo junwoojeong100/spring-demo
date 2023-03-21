@@ -32,7 +32,7 @@ stages:
 - stage: Deploy
   displayName: Deploy stage
   jobs: 
-  - deployment: VM Deploy
+  - deployment: VMDeploy
     displayName: Deploy job
     environment:
       name: test-deploy-to-vm
