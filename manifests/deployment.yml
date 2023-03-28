@@ -17,5 +17,5 @@ spec:
           image: cr2023.azurecr.io/junwoojeongspringdemo:201
           ports:
           - containerPort: 80
-      #imagePullSecrets:
-      #  - name: acr-pull-secret    
+      imagePullSecrets:
+        - name: cr2023f759-auth    
