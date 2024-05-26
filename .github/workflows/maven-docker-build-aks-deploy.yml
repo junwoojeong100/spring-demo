@@ -46,6 +46,7 @@ jobs:
         tenant: ${{ secrets.TENANT }}
         registry: ${{ secrets.REGISTRY }}
         repository: ${{ secrets.REPOSITORY }}
+        subscription: ${{ secrets.SUBSCRIPTION }}
         #image:  azure-vote-front
         #folder: azure-vote
         #branch: master
