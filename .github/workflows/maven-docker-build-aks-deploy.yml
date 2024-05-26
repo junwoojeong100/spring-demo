@@ -43,7 +43,7 @@ jobs:
       with:
         service_principal: ${{ secrets.service_principal }}
         service_principal_password: ${{ secrets.service_principal_password }}
-        tenant: ${{ secrets.tenant }}
+        tenant: ${{ secrets.TENANT }}
         registry: ${{ secrets.registry }}
         repository: ${{ secrets.repository }}
         #image:  azure-vote-front
