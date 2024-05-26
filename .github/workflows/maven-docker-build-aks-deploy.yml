@@ -46,12 +46,8 @@ jobs:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
         
     - name: Build image on ACR
-      uses: azure/CLI@61bb69d64d613b52663984bf12d6bac8fd7b3cc8
-      with:
-        azcliversion: 2.29.1
-        inlineScript: |
-          az configure --defaults acr=${{ secrets.REGISTRY }}
-          az acr build -t ${{ secrets.REGISTRY  }}/${{ secrets.REPOSITORY }}:${{ github.sha }}       
+      run: |
+          az acr build --image ${{ secrets.REGISTRY }}.azurecr.io/${{ secrets.REPOSITORY }}:${{ github.sha }} --registry ${{ secrets.REGISTRY }} -g ${{ secrets.RESOURCE_GROUP }} .
       
     - name: Set AKS context
       id: set-context
