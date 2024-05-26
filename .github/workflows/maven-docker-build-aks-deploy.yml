@@ -20,7 +20,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    # Checks out the repository this file is in
+    - uses: actions/checkout@v4
+
     - name: Set up JDK 17
       uses: actions/setup-java@v3
       with:
@@ -36,36 +38,32 @@ jobs:
 
     #- name: Build the Docker image
     #  run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-    
-    - name: ACR build and push
-      id: build-push-acr
-      uses: azure/acr-build@v1
-      with:
-        service_principal: ${{ secrets.SERVICE_PRINCIPAL }}
-        service_principal_password: ${{ secrets.SERVICE_PRINCIPAL_PASSWORD }}
-        tenant: ${{ secrets.TENANT }}
-        registry: ${{ secrets.REGISTRY }}
-        repository: ${{ secrets.REPOSITORY }}
-        subscription: ${{ secrets.SUBSCRIPTION }}
-        #image:  azure-vote-front
-        #folder: azure-vote
-        #branch: master
-        tag: ${{ github.sha }}
-        
+
+    # Logs in with your Azure credentials
     - name: Azure login
-      id: login
-      uses: azure/login@v1.4.3
+      uses: azure/login@v1.4.6
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: Build image on ACR
+      uses: azure/CLI@61bb69d64d613b52663984bf12d6bac8fd7b3cc8
+      with:
+        azcliversion: 2.29.1
+        inlineScript: |
+          az configure --defaults acr=${{ secrets.REGISTRY }}
+          az acr build -t ${{ secrets.REGISTRY  }}/${{ secrets.REPOSITORY }}:${{ github.sha }}       
+      
     - name: Set AKS context
       id: set-context
       uses: azure/aks-set-context@v3
       with:
         resource-group: '${{ secrets.RESOURCE_GROUP }}' 
         cluster-name: '${{ secrets.CLUSTER_NAME }}'
+        
     - name: Setup kubectl
       id: install-kubectl
       uses: azure/setup-kubectl@v3
+      
     - name: Deploy to AKS
       id: deploy-aks
       uses: Azure/k8s-deploy@v4
