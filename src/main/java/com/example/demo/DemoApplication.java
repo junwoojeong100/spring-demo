@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 	@GetMapping("/")
 	//@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
+		System.out.println("'/hello' called");
 		return String.format("Hello %s!", name);
 	}
 
