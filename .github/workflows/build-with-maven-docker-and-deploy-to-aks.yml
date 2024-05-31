@@ -65,6 +65,6 @@ jobs:
            manifests/deployment.yml
            manifests/service.yml 
         images: '${{ secrets.REGISTRY }}.azurecr.io/${{ secrets.REPOSITORY }}:${{ github.sha }}'
-        pull-images: false       
+        pull-images: true       
       
       
