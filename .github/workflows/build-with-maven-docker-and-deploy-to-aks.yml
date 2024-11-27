@@ -37,26 +37,27 @@ jobs:
 
     # Logs in with your Azure credentials
     - name: Azure login
-      #uses: azure/login@v1.4.6
-      #with:
-      #  creds: ${{ secrets.AZURE_CREDENTIALS }}
-      uses: azure/use-kubelogin@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GHP_TOKEN }}
+      uses: azure/login@v1.4.6
       with:
-        kubelogin-version: 'latest' 
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
       
-        
     - name: Build & push image to ACR
       run: |
           az acr build --image ${{ secrets.REGISTRY }}.azurecr.io/${{ secrets.REPOSITORY }}:${{ github.sha }} --registry ${{ secrets.REGISTRY }} -g ${{ secrets.RESOURCE_GROUP }} .
-      
+
     - name: Set AKS context
       id: set-context
       uses: azure/aks-set-context@v3
       with:
         resource-group: '${{ secrets.RESOURCE_GROUP }}' 
         cluster-name: '${{ secrets.CLUSTER_NAME }}'
+
+    - name: AKS login
+      uses: azure/use-kubelogin@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GHP_TOKEN }}
+      with:
+        kubelogin-version: 'latest' 
         
     - name: Setup kubectl
       id: install-kubectl
