@@ -51,11 +51,16 @@ jobs:
       with:
         resource-group: '${{ secrets.RESOURCE_GROUP }}' 
         cluster-name: '${{ secrets.CLUSTER_NAME }}'
-
         
     - name: Setup kubectl
       id: install-kubectl
       uses: azure/setup-kubectl@v3
+
+    - name: Install kubelogin
+      run: |
+        az aks install-cli
+        az aks get-credentials --resource-group ${{ secrets.RESOURCE_GROUP }} --name ${{ secrets.CLUSTER_NAME }} --admin
+        kubelogin convert-kubeconfig -l azurecli
       
     - name: Deploy to AKS
       id: deploy-aks
