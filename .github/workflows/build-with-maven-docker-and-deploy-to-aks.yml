@@ -56,6 +56,7 @@ jobs:
       id: install-kubectl
       uses: azure/setup-kubectl@v3
 
+    # When authenticating using Microsoft Entra ID
     - name: Install kubelogin
       run: |
         az aks install-cli
