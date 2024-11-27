@@ -38,9 +38,14 @@ jobs:
     # Logs in with your Azure credentials
     - name: Azure login
       #uses: azure/login@v1.4.6
+      #with:
+      #  creds: ${{ secrets.AZURE_CREDENTIALS }}
       uses: azure/use-kubelogin@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GHP_TOKEN }}
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        kubelogin-version: 'latest'
+      
         
     - name: Build & push image to ACR
       run: |
