@@ -52,12 +52,6 @@ jobs:
         resource-group: '${{ secrets.RESOURCE_GROUP }}' 
         cluster-name: '${{ secrets.CLUSTER_NAME }}'
 
-    - name: AKS login
-      uses: azure/use-kubelogin@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GHP_TOKEN }}
-      with:
-        kubelogin-version: 'latest' 
         
     - name: Setup kubectl
       id: install-kubectl
