@@ -1,20 +1,20 @@
 apiVersion : apps/v1
 kind: Deployment
 metadata:
-  name: junwoojeongspringdemo 
+  name: spring-demo 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: junwoojeongspringdemo
+      app: spring-demo
   template:
     metadata:
       labels:
-        app: junwoojeongspringdemo 
+        app: spring-demo
     spec:
       containers:
-        - name: junwoojeongspringdemo 
-          image: cr2024.azurecr.io/junwoojeongspringdemo:latest
+        - name: spring-demo
+          image: crfy25.azurecr.io/spring-demo:latest
           ports:
           - containerPort: 80
       #imagePullSecrets:

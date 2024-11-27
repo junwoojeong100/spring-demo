@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-    name: junwoojeongspringdemo
+    name: spring-demo
 spec:
     type: LoadBalancer
     ports:
     - port: 80 
       targetPort: 80
     selector:
-        app: junwoojeongspringdemo
+        app: spring-demo
