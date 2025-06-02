@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-	@SpringBootApplication
-	@RestController
-	public class DemoApplication {
+@SpringBootApplication
+@RestController
+public class DemoApplication {
 
 	public static void main(String[] args) {		
 		SpringApplication.run(DemoApplication.class, args);
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 	//@GetMapping("/hello")
 	public String hello(@RequestParam(value = "name", defaultValue = "World") String name) {
 		LocalDateTime now = LocalDateTime.now();
-        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		System.out.println(now.format(formatter) + " '/hello' " + name + " called.");
 		return String.format("Hello %s!", name);
 	}
